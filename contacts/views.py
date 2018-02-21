@@ -68,3 +68,15 @@ def export(request):
     response = HttpResponse(dataset.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="contacts.csv"'
     return response
+
+def simple_upload(request):
+    if request.method == 'POST':
+        contacts_resource = ContactInfoResource()
+        dataset = Dataset()
+        new_contacts = request.FILES['myfile']
+
+        imported_data = dataset.load(new_contacts.read().decode('utf-8'))
+                   
+        contacts_resource.import_data(dataset, dry_run=False)  # Actually import now
+
+    return render(request, 'contacts/import.html')

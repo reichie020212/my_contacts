@@ -13,6 +13,6 @@ urlpatterns = [
 	url(r'^home/(?P<pk>\d+)/edit/$',views.ContactInfoUpdate.as_view(),name="edit"),
 	url(r'^home/(?P<pk>\d+)/$',views.ContactInfoDelete.as_view(),name="displaycontact"),
 	#url(r'^home/(?P<pk>\d+)/delete/', views.delete, name="delete"),
-	#url(r'^import/$',views.simple_upload,name="simple_upload"),
+	url(r'^import/$',views.simple_upload,name="simple_upload"),
 	url(r'^export/$', views.export, name="export")
 ]
