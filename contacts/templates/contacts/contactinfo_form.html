@@ -1,0 +1,33 @@
+{% extends 'contacts/base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <h2>Contact Info</h2>
+  <form method="POST" >{% csrf_token %}
+    <div class="form-group">
+      <label for="email">First Name:</label>
+      {% load widget_tweaks %}
+      {{ form.first_name|add_class:"form-control" }}
+    </div>
+    <div class="form-group">
+      <label for="email">Last Name:</label>
+      {% load widget_tweaks %}
+      {{ form.last_name|add_class:"form-control" }}
+    </div>
+    <div class="form-group">
+      <label for="email">Contact Number:</label>
+      {% load widget_tweaks %}
+      {{ form.contact_number|add_class:"form-control" }}
+    </div>
+    <div class="form-group">
+      <label for="email">Address:</label>
+      {% load widget_tweaks %}
+      {{ form.address|add_class:"form-control" }}
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/home/" class="btn btn-default">Back</a>
+  </form>
+</div>
+		
+{% endblock %}

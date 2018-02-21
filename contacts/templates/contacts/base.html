@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<html>
+
+<head>
+	<title>Address Book</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">My Address Book</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/home/">Home</a></li>
+      <li><a href="/import/">CSV Import</a></li>
+      <li><a href="/export/">CSV Export</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      {% if user.is_authenticated %}
+      <li><a href="/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+	{% block content %}
+	{% endblock %}
+</div>
+</body>
+
+</html>

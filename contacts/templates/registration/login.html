@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	</head>
+	<body>
+        <div class="login-page">
+    <h1>Welcome</h1>
+     <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+
+        <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password }}</td>
+        </tr>
+        </table>
+        <input class="btn1" type="submit" value="login" />
+</form>
+        <div class="mybutton">
+        <a href="/signup/" class="btn btn-primary">Sign Up</a>
+    </div>
+</div>
+
+
+</html>
