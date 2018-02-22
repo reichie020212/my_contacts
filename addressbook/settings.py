@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'contacts',
     'import_export',
     'widget_tweaks',
+    'crispy_forms',
+    'fm',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +125,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

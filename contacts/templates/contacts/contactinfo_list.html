@@ -1,5 +1,6 @@
 {% extends 'contacts/base.html' %}
 
+
 {% block content %}
 <div class="container">
 <table class="table table-hover">
@@ -19,14 +20,30 @@
     		<td>{{contact.last_name}}</td>
     		<td>{{contact.contact_number}}</td>
     		<td>{{contact.address}}</td>
-        <td><a class="btn btn-default" href="{% url 'edit' pk=contact.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a class="btn btn-default" href="{% url 'displaycontact' pk=contact.pk %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+        <td><a class="btn btn-default" href="{% url 'edit' pk=contact.pk %}" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-default" href="{% url 'displaycontact' pk=contact.pk %}" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-remove"></span></a></td>
   	  </tr>
         {% endfor %}
     </tbody>
   </table>
   <div class="homebutton">
-  <a href="add/" class="btn btn-primary">Add</a>
+  <button href="{% url 'add' %}" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add</button>
   </div>
+
+<!-- Modal -->
+
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+
+      </div>
+      
+    </div>
+  </div>
+
 </div>
+
+
   {% endblock %}

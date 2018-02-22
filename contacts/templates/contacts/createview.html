@@ -1,0 +1,29 @@
+<body>
+  <h2>Contact Info</h2>
+  <form action="{% url 'add'%}" enctype="multipart/form-data" method="POST">{% csrf_token %}
+  
+    <div class="form-group">
+      <label for="text">First Name:</label>
+      {% load widget_tweaks %}
+      {{ form.first_name|add_class:"form-control" }}
+    </div>
+    <div class="form-group">
+      <label for="text">Last Name:</label>
+      {% load widget_tweaks %}
+      {{ form.last_name|add_class:"form-control" }}
+    </div>
+    <div class="form-group">
+      <label for="text">Contact Number:</label>
+      {% load widget_tweaks %}
+      {{ form.contact_number|add_class:"form-control" }}
+    </div>
+    <div class="form-group">
+      <label for="text">Address:</label>
+      {% load widget_tweaks %}
+      {{ form.address|add_class:"form-control" }}
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Save"/>
+    <a href="{% url 'view_home' %}" class="btn btn-default">Back</a>
+  </form>
+</body>

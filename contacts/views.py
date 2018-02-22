@@ -36,25 +36,30 @@ class ContactInfoList(ListView):
 
 	def get_queryset(self):
 		return ContactInfo.objects.filter(created_by=self.request.user)
-	#contact_info = ContactInfo.objects.filter(created_by=request.user)
-	#return render(request,'contacts/home.html',{'contact_info':contact_info})
 
 def redirecting(request):
 	return redirect('view_home')
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoCreate(CreateView):
-	model = ContactInfo
-	fields = ['first_name','last_name','contact_number','address']
+    template_name = "contacts/createview.html"
+    model = ContactInfo
+    fields = ['first_name','last_name','contact_number','address']
 
-	def form_valid(self, form):
-		form.instance.created_by = self.request.user
-		return super().form_valid(form)
-		
+    def get_success_url(self):
+        return reverse('view_home')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoUpdate(UpdateView):
-	model = ContactInfo
-	fields = ['first_name','last_name','contact_number','address']
+    model = ContactInfo
+    fields = ['first_name','last_name','contact_number','address']
+
+    def get_success_url(self):
+        return reverse('view_home')
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoDelete(DeleteView):
