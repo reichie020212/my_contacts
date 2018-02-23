@@ -116,8 +116,8 @@ def export(request):
 def simple_upload(request):
     if request.method == 'POST':
         contacts_resource = ContactInfoResource()
-        contacts = ContactInfo.objects.filter(first_name="Redick")
-        print(contacts)
+
+
         dataset = Dataset()
         new_contacts = request.FILES['myfile']
 
@@ -132,6 +132,11 @@ def simple_upload(request):
         count = 0
         for x in my_list:
             my_list[count][5] = request.user.id
+        #newcode
+            if ContactInfo.objects.filter(first_name=my_list[count][1],last_name=my_list[count][2]).exists():
+                my_list[count][0] = ContactInfo.objects.get(first_name=my_list[count][1],
+                    last_name=my_list[count][2]).id
+        #endnewcode
             count = count+1
 
         #creating new dataset then add Headers
