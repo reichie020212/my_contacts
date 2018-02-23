@@ -10,4 +10,3 @@ class ExportResource(resources.ModelResource):
     
     class Meta:
         model = ContactInfo
-        exclude = ('id',)

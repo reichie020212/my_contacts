@@ -1,3 +1,4 @@
-id,first_name,last_name,contact_number,address,created_by
-,Redick,Butay,999,happyness,
-,Chin,Franco,888,sadmeess,
+id,created_by,first_name,last_name,contact_number,address
+,,Redick,Butay,+639277487955,happiness
+,,Chin,Franco,+639277487955,sadmeess
+,,Goddamnit,Osmenia,+639277487955,quickness

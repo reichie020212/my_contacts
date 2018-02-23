@@ -49,32 +49,25 @@ def redirecting(request):
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoCreate(CreateView):
-    #template_name = "contacts/createview.html"
+    
     model = ContactInfo
     fields = (['first_name',
         'last_name',
         'contact_number',
         'address'])
-
-    def get_success_url(self):
-        return reverse('view_home')
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
-        setattr(request, 'view', 'views.create')
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoUpdate(UpdateView):
+
     model = ContactInfo
     fields = (['first_name',
         'last_name',
         'contact_number',
         'address'])
-
-    def get_success_url(self):
-        return reverse('view_home')
-        setattr(request, 'view', 'views.update')
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoDelete(DeleteView):
@@ -94,12 +87,15 @@ def export(request):
     #Replace blank to the ID of the user
     count = 0
     for x in my_list:
-        my_list[count][0] = request.user
+        my_list[count][0] = ''
+        
+        my_list[count][1] = request.user
         count = count+1
 
     #creating new dataset then add Headers
     my_data = Dataset()
-    my_data.headers = (['created_by',
+    my_data.headers = (['id',
+        'created_by',
         'first_name',
         'last_name',
         'contact_number',
@@ -112,11 +108,9 @@ def export(request):
     response['Content-Disposition'] = 'attachment; filename="contacts.csv"'
     return response
 
-
 def simple_upload(request):
     if request.method == 'POST':
         contacts_resource = ContactInfoResource()
-
 
         dataset = Dataset()
         new_contacts = request.FILES['myfile']
@@ -131,22 +125,25 @@ def simple_upload(request):
         #Replace blank to the ID of the user
         count = 0
         for x in my_list:
-            my_list[count][5] = request.user.id
-        #newcode
-            if ContactInfo.objects.filter(first_name=my_list[count][1],last_name=my_list[count][2]).exists():
-                my_list[count][0] = ContactInfo.objects.get(first_name=my_list[count][1],
-                    last_name=my_list[count][2]).id
-        #endnewcode
+            my_list[count][1] = request.user.id
+            if ContactInfo.objects.filter(
+                first_name=my_list[count][2],
+                last_name=my_list[count][3]).exists():
+
+                my_list[count][0] = ContactInfo.objects.get(
+                    first_name=my_list[count][2],
+                    last_name=my_list[count][3]).id
+
             count = count+1
 
         #creating new dataset then add Headers
         my_data = Dataset()
         my_data.headers = (['id',
+            'created_by',
             'first_name',
             'last_name',
             'contact_number',
-            'address',
-            'created_by'])
+            'address'])
 
         #Append list to new dataset
         for x in my_list:

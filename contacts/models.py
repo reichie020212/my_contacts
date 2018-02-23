@@ -5,8 +5,9 @@ from django.core.validators import RegexValidator
 from django.core.validators import MaxValueValidator
 from django.shortcuts import reverse
 from django.contrib.auth.models import User
-
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 # Create your models here.
 
@@ -16,8 +17,7 @@ class ContactInfo(models.Model):
 	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	first_name = models.CharField(max_length=60)
 	last_name = models.CharField(max_length=60)
-	contact_number = models.CharField(max_length=15,
-	                                  validators=[numeric]) #upon searching, longest contact number in the world is 15 digits
+	contact_number = PhoneNumberField()
 	address = models.CharField(max_length=150)
 
 	def __str__(self):

@@ -1,7 +1,7 @@
 <body>
-
+<div class="container-fluid">
   <h2>Contact Info</h2>
-  {% if "edit" in request.path  %}
+  {% if "edit" in request.path  %}  
   <form action="{% url 'edit' pk=contactinfo.id %}" enctype="multipart/form-data" method="POST">
   {% elif "add" in request.path  %}
    <form action="{% url 'add'%}" enctype="multipart/form-data" method="POST">{% csrf_token %}
@@ -31,5 +31,10 @@
 
     <input type="submit" class="btn btn-primary" value="Save"/>
     <a href="{% url 'view_home' %}" class="btn btn-default">Back</a>
+  {% if "edit" in request.path  %}  
   </form>
+  {% elif "add" in request.path  %}
+   </form>
+   {% endif %}
+</div>
 </body>

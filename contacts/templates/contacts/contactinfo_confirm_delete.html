@@ -1,4 +1,4 @@
-
+<div class="container-fluid">
 <h2>Are you sure you want to delete this record?</h2>
 <form action="{% url 'displaycontact' pk=contactinfo.id %}" method="POST">
   {% csrf_token %}
@@ -27,3 +27,4 @@
   <a href="{% url 'view_home' %}">No, cancel.</a>
   </div>  
 </form>
+</div>
