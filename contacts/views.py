@@ -13,11 +13,18 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views import View
 from django.http import HttpResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+
 from tablib import Dataset
+import csv
+import shutil
+import os
 
 from .models import ContactInfo
 from .forms import ContactInfoForm
-from .resources import ContactInfoResource
+from .resources import ContactInfoResource, ExportResource
 # Create your views here.
 def signup(request):
     if request.method == 'POST':
@@ -42,9 +49,12 @@ def redirecting(request):
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoCreate(CreateView):
-    template_name = "contacts/createview.html"
+    #template_name = "contacts/createview.html"
     model = ContactInfo
-    fields = ['first_name','last_name','contact_number','address']
+    fields = (['first_name',
+        'last_name',
+        'contact_number',
+        'address'])
 
     def get_success_url(self):
         return reverse('view_home')
@@ -52,14 +62,19 @@ class ContactInfoCreate(CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+        setattr(request, 'view', 'views.create')
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoUpdate(UpdateView):
     model = ContactInfo
-    fields = ['first_name','last_name','contact_number','address']
+    fields = (['first_name',
+        'last_name',
+        'contact_number',
+        'address'])
 
     def get_success_url(self):
         return reverse('view_home')
+        setattr(request, 'view', 'views.update')
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class ContactInfoDelete(DeleteView):
@@ -68,20 +83,70 @@ class ContactInfoDelete(DeleteView):
 		return reverse('view_home')
 
 def export(request):
-    contacts_resource = ContactInfoResource()
+    contacts_resource = ExportResource()
     dataset = contacts_resource.export()
-    response = HttpResponse(dataset.csv, content_type='text/csv')
+    
+    #convert Dataset to List
+    my_list = []
+    for i in dataset:
+        my_list.append(list(i))
+
+    #Replace blank to the ID of the user
+    count = 0
+    for x in my_list:
+        my_list[count][0] = request.user
+        count = count+1
+
+    #creating new dataset then add Headers
+    my_data = Dataset()
+    my_data.headers = (['created_by',
+        'first_name',
+        'last_name',
+        'contact_number',
+        'address'])
+
+    for x in my_list:
+        my_data.append(x)
+
+    response = HttpResponse(my_data.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="contacts.csv"'
     return response
+
 
 def simple_upload(request):
     if request.method == 'POST':
         contacts_resource = ContactInfoResource()
+        contacts = ContactInfo.objects.filter(first_name="Redick")
+        print(contacts)
         dataset = Dataset()
         new_contacts = request.FILES['myfile']
 
-        imported_data = dataset.load(new_contacts.read().decode('utf-8'))
-                   
-        contacts_resource.import_data(dataset, dry_run=False)  # Actually import now
+        dataset.load(new_contacts.read().decode('utf-8'))
 
+        #convert Dataset to List
+        my_list = []
+        for i in dataset:
+            my_list.append(list(i))
+
+        #Replace blank to the ID of the user
+        count = 0
+        for x in my_list:
+            my_list[count][5] = request.user.id
+            count = count+1
+
+        #creating new dataset then add Headers
+        my_data = Dataset()
+        my_data.headers = (['id',
+            'first_name',
+            'last_name',
+            'contact_number',
+            'address',
+            'created_by'])
+
+        #Append list to new dataset
+        for x in my_list:
+            my_data.append(x)
+
+        contacts_resource.import_data(my_data, dry_run=False)  # Actually import now
+        
     return render(request, 'contacts/import.html')

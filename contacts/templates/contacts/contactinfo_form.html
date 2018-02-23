@@ -1,7 +1,12 @@
 <body>
 
   <h2>Contact Info</h2>
-  <form action="{% url 'edit' pk=contactinfo.id %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
+  {% if "edit" in request.path  %}
+  <form action="{% url 'edit' pk=contactinfo.id %}" enctype="multipart/form-data" method="POST">
+  {% elif "add" in request.path  %}
+   <form action="{% url 'add'%}" enctype="multipart/form-data" method="POST">{% csrf_token %}
+   {% endif %}
+  {% csrf_token %}
   
     <div class="form-group">
       <label for="text">First Name:</label>
